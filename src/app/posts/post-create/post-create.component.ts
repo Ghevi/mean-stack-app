@@ -1,15 +1,28 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+import { Post } from '../post.model';
+import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
-  styleUrls: ['./post-create.component.css']
+  styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent {
-  enteredValue = '';
-  newPost = 'No content';
+  // @Output() postCreated = new EventEmitter<Post>();
 
-  onAddPost() {
-    this.newPost = this.enteredValue;
+  constructor(private postService: PostService) {}
+
+  onAddPost(form: NgForm) {
+    const post: Post = {
+      // title: this.enteredTitle,
+      // content: this.enteredContent,
+      title: form.value.title,
+      content: form.value.content
+    };
+    // this.postCreated.emit(post);
+    this.postService.addPost(post);
+    form.resetForm();
   }
 }
