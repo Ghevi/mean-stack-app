@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -12,7 +13,7 @@ export class PostService {
   private posts: Post[] = [];
   private postsUpdated$ = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getPosts() {
     // return [...this.posts];
@@ -35,6 +36,15 @@ export class PostService {
       });
   }
 
+  getPost(id: string) {
+    // return { ...this.posts.find((post) => post.id === id) };
+    return this.http.get<{_id: string, title: string, content: string}>(`http://localhost:3000/api/posts/${id}`);
+  }
+
+  getPostUpdateListener() {
+    return this.postsUpdated$.asObservable();
+  }
+
   // addPost(title: string, content: string) {
   //   const post: Post = { title: title, content: content };
   //   this.posts.push(post);
@@ -43,7 +53,7 @@ export class PostService {
   addPost(title: string, content: string) {
     const post: Post = { id: null, title: title, content: content };
     this.http
-      .post<{ message: string, postId: string }>(
+      .post<{ message: string; postId: string }>(
         'http://localhost:3000/api/posts',
         post
       )
@@ -52,11 +62,29 @@ export class PostService {
         post.id = id;
         this.posts.push(post);
         this.postsUpdated$.next([...this.posts]);
+        this.router.navigate(["/"]);
       });
 
     // This is optimistic updating
     // this.posts.push(post);
     // this.postsUpdated$.next([...this.posts]);
+  }
+
+  updatePost(id: string, title: string, content: string) {
+    const post: Post = { id: id, title: title, content: content };
+    this.http
+      .put(`http://localhost:3000/api/posts/${id}`, post)
+      .subscribe((response) => {
+        const updatedPost = [...this.posts];
+
+        // this is unnecessary now because we dont visit the post list page
+        const oldPostIndex = updatedPost.findIndex((p) => p.id === post.id);
+        updatedPost[oldPostIndex] = post;
+        this.posts = updatedPost;
+
+        this.postsUpdated$.next([...this.posts]);
+        this.router.navigate(["/"]);
+      });
   }
 
   deletePost(postId: string) {
@@ -67,9 +95,5 @@ export class PostService {
         this.posts = updatedPost;
         this.postsUpdated$.next([...this.posts]);
       });
-  }
-
-  getPostUpdateListener() {
-    return this.postsUpdated$.asObservable();
   }
 }
