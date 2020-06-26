@@ -26,6 +26,7 @@ export class PostService {
               title: post.title,
               content: post.content,
               id: post._id,
+              imagePath: post.imagePath,
             };
           });
         })
@@ -38,7 +39,9 @@ export class PostService {
 
   getPost(id: string) {
     // return { ...this.posts.find((post) => post.id === id) };
-    return this.http.get<{_id: string, title: string, content: string}>(`http://localhost:3000/api/posts/${id}`);
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(
+      `http://localhost:3000/api/posts/${id}`
+    );
   }
 
   getPostUpdateListener() {
@@ -50,19 +53,31 @@ export class PostService {
   //   this.posts.push(post);
   // }
 
-  addPost(title: string, content: string) {
-    const post: Post = { id: null, title: title, content: content };
+  addPost(title: string, content: string, image: File) {
+    // const post: Post = { id: null, title: title, content: content };
+    const postData = new FormData(); // text + blob
+    postData.append('title', title);
+    postData.append('content', content);
+    postData.append('image', image, title);
     this.http
-      .post<{ message: string; postId: string }>(
+      // .post<{ message: string; postId: string }>(
+      .post<{ message: string; post: Post }>(
         'http://localhost:3000/api/posts',
-        post
+        // post
+        postData
       )
       .subscribe((responseData) => {
-        const id = responseData.postId;
-        post.id = id;
+        const post: Post = {
+          id: responseData.post.id,
+          title: title,
+          content: content,
+          imagePath: responseData.post.imagePath,
+        };
+        // const id = responseData.postId;
+        // post.id = id;
         this.posts.push(post);
         this.postsUpdated$.next([...this.posts]);
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       });
 
     // This is optimistic updating
@@ -70,20 +85,49 @@ export class PostService {
     // this.postsUpdated$.next([...this.posts]);
   }
 
-  updatePost(id: string, title: string, content: string) {
-    const post: Post = { id: id, title: title, content: content };
+  updatePost(id: string, title: string, content: string, image: File | string) {
+    // const post: Post = {
+    //   id: id,
+    //   title: title,
+    //   content: content,
+    //   imagePath: null,
+    // };
+
+    let postData: Post | FormData;
+
+    if (typeof image === 'object') {
+      postData = new FormData();
+      postData.append('id', id);
+      postData.append('title', title);
+      postData.append('content', content);
+      postData.append('image', image, title);
+    } else {
+      postData = {
+        id: id,
+        title: title,
+        content: content,
+        imagePath: image,
+      };
+    }
+
     this.http
-      .put(`http://localhost:3000/api/posts/${id}`, post)
+      .put(`http://localhost:3000/api/posts/${id}`, postData)
       .subscribe((response) => {
         const updatedPost = [...this.posts];
 
         // this is unnecessary now because we dont visit the post list page
-        const oldPostIndex = updatedPost.findIndex((p) => p.id === post.id);
+        const oldPostIndex = updatedPost.findIndex((p) => p.id === id);
+        const post: Post = {
+          id: id,
+          title: title,
+          content: content,
+          imagePath: '',
+        };
         updatedPost[oldPostIndex] = post;
         this.posts = updatedPost;
 
         this.postsUpdated$.next([...this.posts]);
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       });
   }
 
