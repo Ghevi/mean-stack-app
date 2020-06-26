@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -26,7 +27,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
   ],
   imports: [
     BrowserModule,
-//  FormsModule,  // Template driven approach
+    //  FormsModule,  // Template driven approach
     ReactiveFormsModule, // Reactive driven approach
     BrowserAnimationsModule,
     MatInputModule,
@@ -37,6 +38,7 @@ import { PostListComponent } from './posts/post-list/post-list.component';
     HttpClientModule,
     AppRoutingModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent],

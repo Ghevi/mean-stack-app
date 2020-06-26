@@ -81,13 +81,30 @@ router.put(
 );
 
 router.get("", (req, res, next) => {
-  Post.find().then((documents) => {
-    res.status(200).json({
-      message: "Posts fetched successfully",
-      posts: documents,
+  // console.log(req.query); .pageSize and .page are up to us
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts;
+  if (pageSize && currentPage) {
+    postQuery
+      .skip(pageSize * (currentPage - 1)) // skip n elements to get to the nth page and so on
+      .limit(pageSize); // return n elements
+    // This approach is fine untill the number of elements gets very high
+    // https://stackoverflow.com/questions/5539955/how-to-paginate-with-mongoose-in-node-js
+  }
+  postQuery
+    .then((documents) => {
+      fetchedPosts = documents;
+      return Post.count();
+    })
+    .then((count) => {
+      res.status(200).json({
+        message: "Posts fetched successfully",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
     });
-  });
-
   // const posts = [
   //   {
   //     id: "fnnfas1223",
