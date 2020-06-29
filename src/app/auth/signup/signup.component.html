@@ -37,7 +37,7 @@
         >You have to accept the terms and conditions</mat-error
       >
     </section>
-    <button mat-raised-button color="accent" type="submit">
+    <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
       Signup
     </button>
   </form>
