@@ -32,6 +32,7 @@ export class PostService {
                 content: post.content,
                 id: post._id,
                 imagePath: post.imagePath,
+                creator: post.creator,
               };
             }),
             maxPosts: postData.maxPosts,
@@ -39,6 +40,7 @@ export class PostService {
         })
       )
       .subscribe((mappedPostData) => {
+        // console.log(mappedPostData);
         this.posts = mappedPostData.posts;
         this.postsUpdated$.next({
           posts: [...this.posts],
@@ -54,6 +56,7 @@ export class PostService {
       title: string;
       content: string;
       imagePath: string;
+      creator: string;
     }>(`http://localhost:3000/api/posts/${id}`);
   }
 
@@ -121,6 +124,7 @@ export class PostService {
         title: title,
         content: content,
         imagePath: image,
+        creator: null,
       };
     }
 
@@ -147,12 +151,11 @@ export class PostService {
   }
 
   deletePost(postId: string) {
-    return this.http
-      .delete(`http://localhost:3000/api/posts/${postId}`);
-      // .subscribe(() => {
-      //   const updatedPost = this.posts.filter((post) => post.id !== postId);
-      //   this.posts = updatedPost;
-      //   this.postsUpdated$.next([...this.posts]);
-      // });
+    return this.http.delete(`http://localhost:3000/api/posts/${postId}`);
+    // .subscribe(() => {
+    //   const updatedPost = this.posts.filter((post) => post.id !== postId);
+    //   this.posts = updatedPost;
+    //   this.postsUpdated$.next([...this.posts]);
+    // });
   }
 }
