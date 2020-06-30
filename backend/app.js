@@ -10,7 +10,10 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://ghevi:kB08uTSVy1d0jkqH@cluster0-agcui.mongodb.net/node-angular?retryWrites=true&w=majority"
+    // `mongodb+srv://ghevi:${process.env.MONGO_ATLAS_PW}@cluster0-agcui.mongodb.net/node-angular?retryWrites=true&w=majority`
+    "mongodb+srv://ghevi:" +
+      process.env.MONGO_ATLAS_PW +
+      "@cluster0-agcui.mongodb.net/node-angular?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Connected to database");
