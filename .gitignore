@@ -52,4 +52,7 @@ Thumbs.db
 # Env
 nodemon.json
 
-backend/backend.zip
+# Builds
+backend/backend-two-app.zip
+backend/backend_integrated.zip
+backend/angular
