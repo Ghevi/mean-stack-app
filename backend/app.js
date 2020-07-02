@@ -10,7 +10,6 @@ const app = express();
 
 mongoose
   .connect(
-    // `mongodb+srv://ghevi:${process.env.MONGO_ATLAS_PW}@cluster0-agcui.mongodb.net/node-angular?retryWrites=true&w=majority`
     "mongodb+srv://ghevi:" +
       process.env.MONGO_ATLAS_PW +
       "@cluster0-agcui.mongodb.net/node-angular?retryWrites=true&w=majority"
@@ -24,8 +23,7 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images", express.static(path.join(__dirname, "images")));
-app.use("/", express.static(path.join(__dirname, "angular")));
+app.use("/images", express.static(path.join("images")));
 
 // To allow cors access
 app.use((req, res, next) => {
@@ -44,24 +42,4 @@ app.use((req, res, next) => {
 app.use("/api/posts", postsRoutes);
 app.use("/api/user", userRoutes);
 
-// For integrated deployment
-app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, "angular", "index.html"));
-});
-
 module.exports = app;
-
-// const express = require("express");
-
-// const app = express();
-
-// app.use((req, res, next) => {
-//   console.log('First middleware');
-//   next(); // let continue the request
-// });
-
-// app.use((req, res, next) => {
-//   res.send('Hello from express lol');
-// });
-
-// module.exports = app;

@@ -27,9 +27,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
     this.authService.createUser(form.value.email, form.value.password);
-    // .subscribe(null, (error) => {
-    //   this.isLoading = false;
-    // }); This was just to see the error and stop the spinner
   }
 
   ngOnDestroy() {

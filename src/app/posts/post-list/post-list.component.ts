@@ -12,13 +12,6 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./post-list.component.css'],
 })
 export class PostListComponent implements OnInit, OnDestroy {
-  // posts = [
-  //   { title: 'First Post', content: "This is the first post's content" },
-  //   { title: 'Second Post', content: "This is the second post's content" },
-  //   { title: 'Third Post', content: "This is the third post's content" },
-  // ];
-  // @Input() posts: Post[] = [];
-
   posts: Post[] = [];
   isLoading = false;
   totalPosts = 0;
@@ -56,20 +49,22 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   onChangedPage(pageData: PageEvent) {
-    // console.log(pageData);
     this.isLoading = true;
-    this.currentPage = pageData.pageIndex + 1; // starts at 0
+    this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
     this.postService.getPosts(this.postsPerPage, this.currentPage);
   }
 
   onDelete(postId: string) {
     this.isLoading = true;
-    this.postService.deletePost(postId).subscribe(() => {
-      this.postService.getPosts(this.postsPerPage, this.currentPage);
-    }, () => {
-      this.isLoading = false;
-    });
+    this.postService.deletePost(postId).subscribe(
+      () => {
+        this.postService.getPosts(this.postsPerPage, this.currentPage);
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   ngOnDestroy() {

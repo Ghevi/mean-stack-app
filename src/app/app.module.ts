@@ -32,6 +32,6 @@ import { ErrorComponent } from './error/error.component';
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent], // tells angular to prepare this component that is not loaded with a selector or routing
+  entryComponents: [ErrorComponent],
 })
 export class AppModule {}

@@ -24,7 +24,3 @@ export class AuthGuard implements CanActivate {
   }
 }
 
-// implements some interfaces that force the class to load some
-// methods before a route
-// this is just a ux thing because in those routes you could not
-// do anything if not authenticated

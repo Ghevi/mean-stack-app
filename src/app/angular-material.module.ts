@@ -10,8 +10,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  // We can remove the imports because the exports will do it itself
-  // so we dont have duplicate code
   exports: [
     MatInputModule,
     MatCardModule,
@@ -22,6 +20,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatPaginatorModule,
     MatCheckboxModule,
     MatDialogModule,
-  ]
+  ],
 })
 export class AngularMaterialModule {}

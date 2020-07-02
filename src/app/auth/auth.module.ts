@@ -16,7 +16,7 @@ import { SignupComponent } from './signup/signup.component';
   imports: [
     CommonModule,
     AngularMaterialModule,
-    FormsModule, // Template driven approach
+    FormsModule,
     AuthRoutingModule,
   ]
 })

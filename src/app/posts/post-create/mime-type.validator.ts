@@ -33,7 +33,7 @@ export const mimeType = (
             isValid = true;
             break;
           default:
-            isValid = false; // Or you can use the blob.type as fallback
+            isValid = false; 
             break;
         }
         if (isValid) {
@@ -46,5 +46,5 @@ export const mimeType = (
       fileReader.readAsArrayBuffer(file);
     }
   );
-  return fileReader$; // if valid return null otherwise an error
+  return fileReader$;
 };

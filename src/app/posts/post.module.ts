@@ -12,7 +12,7 @@ import { PostListComponent } from './post-list/post-list.component';
   declarations: [PostCreateComponent, PostListComponent],
   imports: [
     CommonModule,
-    ReactiveFormsModule, // Reactive driven approach
+    ReactiveFormsModule,
     AngularMaterialModule,
     RouterModule,
   ],

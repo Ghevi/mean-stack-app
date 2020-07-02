@@ -14,8 +14,6 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./post-create.component.css'],
 })
 export class PostCreateComponent implements OnInit, OnDestroy {
-  // @Output() postCreated = new EventEmitter<Post>();
-
   post: Post;
   isLoading = false;
   form: FormGroup;
@@ -31,11 +29,11 @@ export class PostCreateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
-      authStatus => {
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe((authStatus) => {
         this.isLoading = false;
-      }
-    );
+      });
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
@@ -86,7 +84,6 @@ export class PostCreateComponent implements OnInit, OnDestroy {
   }
 
   onSavePost() {
-    // template has (form:ngForm), for reactive we add this. before form here
     if (this.form.invalid) {
       return;
     }
@@ -105,17 +102,7 @@ export class PostCreateComponent implements OnInit, OnDestroy {
         this.form.value.image
       );
     }
-    // form.resetForm();
     this.form.reset();
-
-    // const post: Post = {
-    //   // title: this.enteredTitle,
-    //   // content: this.enteredContent,
-    //   id: null,
-    //   title: form.value.title,
-    //   content: form.value.content
-    // };
-    // this.postCreated.emit(post);
   }
 
   ngOnDestroy() {
